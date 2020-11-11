@@ -5,7 +5,22 @@ import re
 import json
 
 
-def citation_retrival(data_folder, file_ext):
+def citation_conversion(data_folder, file_ext, output_folder):
+    """
+    This function helps to process all the xml file in the folder
+    and convert into single json file for easy access.
+    this will strip out the year and court from the xml sentences.
+
+    Parameters
+    -----------
+    data_folder : str
+        The directory in which the xml files are stored.
+    file_ext: str
+        Extension of the file
+    Returns
+    ---------
+        Result: str
+    """
     try:
         citation_name_filtered = []
         citation_tocase_filtered = []
@@ -43,12 +58,32 @@ def citation_retrival(data_folder, file_ext):
                         text = re.sub(r'[A-Z]{2,}$', '', text)
                         text = text.strip()
                         citation_tocase_filtered.append(text)
-        print(citation_name_filtered)
+        results = '''All XML File in the folder are processed.
+                    Years and court name removed from the sentence
+                    '''
+        return results
     except Exception as e:
-        print(str(e))
+        return str(e)
 
 
-def fulltext_retrival(data_folder, file_ext):
+def fulltext_conversion(data_folder, file_ext, output_folder):
+    """
+    This function helps to process all the xml file in the folder
+    and convert into single json file for easy access.
+    this will strip out the year and court from the xml sentences.
+
+    Parameters
+    -----------
+    data_folder : str
+        The directory in which the xml files are stored.
+    file_ext: str
+        Extension of the file
+    output_folder:
+        Output folder where json file needs to be saved
+    Returns
+    ---------
+        Result: str
+    """
     try:
         full_text = {}
         for path, subdir, files in os.walk(data_folder):
@@ -100,17 +135,12 @@ def fulltext_retrival(data_folder, file_ext):
                             'full_text': case_sent_filter}
 
                     full_text[case_name] = data
-        with open('cleaned_full_text.json', 'w') as fp:
+        with open(output_folder+'/cleaned_full_text.json', 'w') as fp:
             json.dump(full_text, fp)
-        print('data cleaned and saved as json file')
+        results = '''All XML File in the folder are processed.
+                    Years and court name removed from the sentence
+                    '''
+        return results
 
     except Exception as e:
-        print(str(e))
-
-
-citation_class_data_folder = '..\\..\\data\\raw_data\\citations_class\\'
-citations_summ_data_folder = '..\\..\\data\\raw_data\\citations_summ\\'
-case_full_text = '..\\..\\data\\raw_data\\fulltext\\'
-
-# citation_retrival(citation_class_data_folder, '*.xml')
-fulltext_retrival(case_full_text, '*.xml')
+        return str(e)
